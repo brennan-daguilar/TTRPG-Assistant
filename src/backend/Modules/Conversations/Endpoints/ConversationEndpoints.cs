@@ -41,6 +41,19 @@ public static class ConversationEndpoints
             return Results.Created($"/api/conversations/{conversation.Id}", conversation);
         });
 
+        group.MapPut("/{id:guid}", async (Guid id, UpdateConversationRequest request, AppDbContext db, CancellationToken ct) =>
+        {
+            var conversation = await db.Conversations.FindAsync([id], ct);
+            if (conversation is null) return Results.NotFound();
+
+            if (request.Title is not null)
+                conversation.Title = request.Title;
+            conversation.UpdatedAt = DateTime.UtcNow;
+            await db.SaveChangesAsync(ct);
+
+            return Results.Ok(conversation);
+        });
+
         group.MapDelete("/{id:guid}", async (Guid id, AppDbContext db, CancellationToken ct) =>
         {
             var conversation = await db.Conversations.FindAsync([id], ct);
@@ -56,3 +69,4 @@ public static class ConversationEndpoints
 
 public record ConversationListItem(Guid Id, string Title, DateTime CreatedAt, DateTime UpdatedAt);
 public record CreateConversationRequest(string? Title);
+public record UpdateConversationRequest(string? Title);

@@ -48,7 +48,9 @@ app.UseCors();
 // Map module endpoints
 app.MapWorldEntityEndpoints();
 app.MapImportEndpoints();
+app.MapRelationshipEndpoints();
 app.MapConversationEndpoints();
+app.MapProposalEndpoints();
 
 // Map SignalR hubs
 app.MapHub<ChatHub>("/hubs/chat");
