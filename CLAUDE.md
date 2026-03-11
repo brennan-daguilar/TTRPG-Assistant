@@ -35,14 +35,17 @@ RAG-powered application for managing TTRPG worldbuilding content with live sessi
 
 ## Development Commands
 ```bash
-# Backend
+# Start PostgreSQL + pgvector
+docker compose up -d
+
+# Backend (runs on http://localhost:5128)
 cd src/backend && dotnet run
 
-# Frontend
+# Frontend (runs on http://localhost:5173, proxies API to backend)
 cd src/frontend && npm run dev
 
-# Docker (PostgreSQL + pgvector)
-docker compose up -d
+# EF Core migrations
+cd src/backend && dotnet ef migrations add <Name> --output-dir Infrastructure/Database/Migrations
 ```
 
 ## Design Principles
