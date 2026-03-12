@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using TTRPGHelper.Api.Common.RAG;
 using TTRPGHelper.Api.Infrastructure.AI.LLM;
 using TTRPGHelper.Api.Infrastructure.Database;
@@ -10,10 +11,14 @@ using TTRPGHelper.Api.Modules.KnowledgeBase.Endpoints;
 var builder = WebApplication.CreateBuilder(args);
 
 // Database
+var dataSourceBuilder = new NpgsqlDataSourceBuilder(
+    builder.Configuration.GetConnectionString("DefaultConnection"));
+dataSourceBuilder.EnableDynamicJson();
+dataSourceBuilder.UseVector();
+var dataSource = dataSourceBuilder.Build();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        o => o.UseVector()));
+    options.UseNpgsql(dataSource, o => o.UseVector()));
 
 // AI Services
 builder.Services.AddLlmServices(builder.Configuration);

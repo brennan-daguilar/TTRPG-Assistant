@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Stack, Title, SegmentedControl, Group, Text, Loader, Button } from '@mantine/core';
-import { proposals as api, NoteProposal } from '../api/client';
+import { proposals as api } from '../api/client';
+import type { NoteProposal } from '../api/client';
 import ProposalCard from '../components/chat/ProposalCard';
 
 export default function ProposalsPage() {

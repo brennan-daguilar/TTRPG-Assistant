@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Stack, TextInput, Paper, Text, ScrollArea, Group, Badge, ActionIcon, Loader, Box } from '@mantine/core';
-import { createChatConnection, conversations as convApi, SourceReference, NoteProposal } from '../../api/client';
+import { createChatConnection, conversations as convApi } from '../../api/client';
+import type { SourceReference, NoteProposal } from '../../api/client';
 import type { HubConnection } from '@microsoft/signalr';
 import ProposalCard from './ProposalCard';
 

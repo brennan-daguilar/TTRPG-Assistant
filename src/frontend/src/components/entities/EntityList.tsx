@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Stack, TextInput, Select, Group, Card, Text, Badge, ActionIcon, Loader } from '@mantine/core';
-import { entities as api, EntityListItem } from '../../api/client';
+import { entities as api } from '../../api/client';
+import type { EntityListItem } from '../../api/client';
 
 interface EntityListProps {
   onSelect: (id: string) => void;

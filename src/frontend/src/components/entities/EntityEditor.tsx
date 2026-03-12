@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Stack, TextInput, Textarea, Select, TagsInput, Button, Group, Text, Loader, Modal, Card, Badge, ActionIcon } from '@mantine/core';
-import { entities as api, relationships as relApi, WorldEntity, Relationship, EntityListItem } from '../../api/client';
+import { entities as api, relationships as relApi } from '../../api/client';
+import type { WorldEntity, Relationship, EntityListItem } from '../../api/client';
 
 interface EntityEditorProps {
   entityId?: string;

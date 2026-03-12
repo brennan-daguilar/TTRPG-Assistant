@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Stack, NavLink, ActionIcon, Group, Text, Loader, Modal, Button } from '@mantine/core';
-import { conversations as api, ConversationListItem } from '../../api/client';
+import { conversations as api } from '../../api/client';
+import type { ConversationListItem } from '../../api/client';
 
 interface ConversationListProps {
   selectedId: string | null;

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Card, Group, Text, Badge, Button, Textarea, Stack } from '@mantine/core';
-import { proposals as api, NoteProposal } from '../../api/client';
+import { proposals as api } from '../../api/client';
+import type { NoteProposal } from '../../api/client';
 
 interface ProposalCardProps {
   proposal: NoteProposal;
