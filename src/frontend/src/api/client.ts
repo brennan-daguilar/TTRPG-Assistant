@@ -23,6 +23,8 @@ export interface WorldEntity {
   metadata: Record<string, string>;
   createdAt: string;
   updatedAt: string;
+  relationshipsFrom?: Relationship[];
+  relationshipsTo?: Relationship[];
 }
 
 export interface EntityListItem {
@@ -40,6 +42,29 @@ export interface SourceReference {
   entityType: string;
   sectionHeading?: string;
   score: number;
+}
+
+export interface Relationship {
+  id: string;
+  fromEntityId: string;
+  fromEntityName: string;
+  toEntityId: string;
+  toEntityName: string;
+  relationshipType: string;
+  description?: string;
+}
+
+export interface NoteProposal {
+  id: string;
+  proposalType: 'update' | 'create';
+  targetEntityName?: string;
+  newEntityName?: string;
+  newEntityType?: string;
+  originalContent?: string;
+  proposedContent: string;
+  description?: string;
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt?: string;
 }
 
 // Entity API
@@ -60,6 +85,14 @@ export const entities = {
   types: () => fetchJson<string[]>('/entities/types'),
 };
 
+// Relationship API
+export const relationships = {
+  forEntity: (entityId: string) => fetchJson<Relationship[]>(`/relationships/entity/${entityId}`),
+  create: (data: { fromEntityId: string; toEntityId: string; relationshipType: string; description?: string }) =>
+    fetchJson<Relationship>('/relationships', { method: 'POST', body: JSON.stringify(data) }),
+  delete: (id: string) => fetchJson<void>(`/relationships/${id}`, { method: 'DELETE' }),
+};
+
 // Import API
 export const imports = {
   markdown: (data: { content: string; name?: string; entityType?: string; description?: string; tags?: string[] }) =>
@@ -74,12 +107,45 @@ export interface ConversationListItem {
   updatedAt: string;
 }
 
+export interface ConversationDetail {
+  id: string;
+  title: string;
+  messages: { id: string; role: string; content: string; referencedChunkIds?: string[]; createdAt: string }[];
+}
+
 export const conversations = {
   list: () => fetchJson<ConversationListItem[]>('/conversations'),
-  get: (id: string) => fetchJson<any>(`/conversations/${id}`),
+  get: (id: string) => fetchJson<ConversationDetail>(`/conversations/${id}`),
   create: (title?: string) =>
-    fetchJson<any>('/conversations', { method: 'POST', body: JSON.stringify({ title }) }),
+    fetchJson<ConversationDetail>('/conversations', { method: 'POST', body: JSON.stringify({ title }) }),
+  update: (id: string, data: { title?: string }) =>
+    fetchJson<ConversationDetail>(`/conversations/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   delete: (id: string) => fetchJson<void>(`/conversations/${id}`, { method: 'DELETE' }),
+};
+
+// Proposal API
+export const proposals = {
+  list: (status?: string) => {
+    const qs = status ? `?status=${status}` : '';
+    return fetchJson<NoteProposal[]>(`/proposals${qs}`);
+  },
+  approve: (id: string, editedContent?: string) =>
+    fetchJson<NoteProposal>(`/proposals/${id}/approve`, {
+      method: 'POST',
+      body: JSON.stringify({ editedContent }),
+    }),
+  reject: (id: string) =>
+    fetchJson<NoteProposal>(`/proposals/${id}/reject`, { method: 'POST' }),
+  bulkApprove: (ids: string[]) =>
+    fetchJson<{ approved: number }>('/proposals/bulk-approve', {
+      method: 'POST',
+      body: JSON.stringify({ ids }),
+    }),
+  bulkReject: (ids: string[]) =>
+    fetchJson<{ rejected: number }>('/proposals/bulk-reject', {
+      method: 'POST',
+      body: JSON.stringify({ ids }),
+    }),
 };
 
 // SignalR Chat Connection

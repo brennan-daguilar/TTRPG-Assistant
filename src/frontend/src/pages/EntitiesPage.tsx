@@ -8,7 +8,9 @@ export default function EntitiesPage() {
   const [refreshKey, setRefreshKey] = useState(0);
 
   const handleNew = () => setSelectedId(undefined);
-  const handleSaved = () => {
+  const handleSaved = () => setRefreshKey((k) => k + 1);
+  const handleDeleted = () => {
+    setSelectedId(undefined);
     setRefreshKey((k) => k + 1);
   };
 
@@ -23,7 +25,7 @@ export default function EntitiesPage() {
           <EntityList key={refreshKey} onSelect={setSelectedId} selectedId={selectedId} />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 8 }}>
-          <EntityEditor entityId={selectedId} onSaved={handleSaved} />
+          <EntityEditor entityId={selectedId} onSaved={handleSaved} onDeleted={handleDeleted} />
         </Grid.Col>
       </Grid>
     </>

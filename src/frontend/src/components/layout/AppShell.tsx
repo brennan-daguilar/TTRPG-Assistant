@@ -12,6 +12,7 @@ export default function Shell() {
     { label: 'Chat', path: '/' },
     { label: 'Knowledge Base', path: '/entities' },
     { label: 'Import', path: '/import' },
+    { label: 'Proposals', path: '/proposals' },
   ];
 
   return (
